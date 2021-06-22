@@ -22,7 +22,8 @@ app.get("/user-info", (req, res) => {
  */
 app.get("/rank-list", (req, res) => {
   var orderType = req.query.order ?? 0;
-  let retData = usersList.map( user => {
+  console.log(req.query.order, orderType, (orderType === "0"))
+  let retData = usersList.map( (user, idx) => {
     let userFunnyCnt = 0
     user.conversations?.forEach(conversation => {
       conversation?.sentences?.forEach( sentence => {
@@ -31,7 +32,11 @@ app.get("/rank-list", (req, res) => {
       });
     })
     return {...user, funnyCnt: userFunnyCnt}
-  }).sort( (user1, user2) => (orderType ? (user1.funnyCnt - user2.funnyCnt) : (user2.funnyCnt - user1.funnyCnt) ))
+  }).sort( (user1, user2) => (
+    (orderType === "0") ? (user1.funnyCnt - user2.funnyCnt) : (user2.funnyCnt - user1.funnyCnt) 
+  )).map( (user, idx) => (
+    {...user, rank: (orderType !== "0") ? idx + 1 : usersList.length - idx}
+  ))
 
   res
     .status(200)

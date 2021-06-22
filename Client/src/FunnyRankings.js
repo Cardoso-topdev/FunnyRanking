@@ -4,6 +4,7 @@ const callBackendAPI = async (orderType) => {
   const response = await fetch("/rank-list?order=" + orderType);
   const body = await response.json();
 
+  console.log("body: ", body)
   if (response.status !== 200) {
     throw Error(body.message);
   }
@@ -13,7 +14,7 @@ const callBackendAPI = async (orderType) => {
 function UserListItem(props) {
   return (
     <div>
-      <h3>{props.user.user}</h3>
+      <h3>{props.user.rank}. {props.user.user}</h3>
     </div>
   )
 }
@@ -30,12 +31,16 @@ function FunnyRankings() {
   // This is called once when the component is mounted in the DOM to fetch
   // the data from the backend and set the state to the response
   useEffect(() => {
+    console.log("passed!", orderType)
     callBackendAPI(orderType)
       .then((res) => setData(res))
       .catch((err) => console.log(err));
-  }, []);
+  }, [orderType]);
 
-  return <div>{data.map( user => <UserListItem user={user} />)}</div>;
+  return <div>
+    <button onClick={() => setOrderType(orderType === 0 ? 1 : 0)}>{orderType === 0 ? "Ascending" : "Descending" }</button>
+    {data.map( user => <UserListItem user={user}/>)}
+  </div>;
 }
 
 export default FunnyRankings;
