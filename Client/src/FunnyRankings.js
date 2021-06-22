@@ -39,7 +39,7 @@ function FunnyRankings() {
 
   return <div>
     <button onClick={() => setOrderType(orderType === 0 ? 1 : 0)}>{orderType === 0 ? "Ascending" : "Descending" }</button>
-    {data.map( user => <UserListItem user={user}/>)}
+    {data.map( (user, idx) => <UserListItem user={user} key={idx}/>)}
   </div>;
 }
 

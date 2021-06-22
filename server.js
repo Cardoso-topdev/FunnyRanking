@@ -21,7 +21,7 @@ app.get("/user-info", (req, res) => {
  * @param {Number} [order] - order type. 0 : desc, 1: asc
  */
 app.get("/rank-list", (req, res) => {
-  var orderType = req.query.order ?? 0;
+  var orderType = req.query.order ? req.query.order : 0;
   console.log(req.query.order, orderType, (orderType === "0"))
   let retData = usersList.map( (user, idx) => {
     let userFunnyCnt = 0
